@@ -5,9 +5,6 @@ using System.Windows.Media;
 
 namespace MOVEf_WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         List<string> vidExtensions { get; } = new() { ".mp4", ".m4v", ".3gp", ".m4p", ".mpg", ".mpeg", ".mp2", ".mpe", ".mpv", ".avi", ".mkv", ".mov", ".qt", ".wmv", ".flv", ".swf", ".webm", ".ogg", ".avchd" };
@@ -17,15 +14,12 @@ namespace MOVEf_WPF
 
         List<string> filesNotSupported { get; } = new();
 
-        ObservableCollection<string> droppedFilesPaths { get; set; }
-        //List<string> droppedFilesPaths { get; } = new();
         Color color = (Color)ColorConverter.ConvertFromString("#FF313338");
 
 
-        public MainWindow(/*string[] myCommandLineArgs*/)
+        public MainWindow()
         {
             InitializeComponent();
-            droppedFilesPaths = new ObservableCollection<string>();
             txt.Text = "Drag and drop files here";
 
             allCategories.Add(vidExtensions);
@@ -33,54 +27,6 @@ namespace MOVEf_WPF
             allCategories.Add(audioExtensions);
 
             //myCommandLineArgs = Environment.GetCommandLineArgs();
-
-
-
-            //string actualFilePath = myCommandLineArgs[1];
-            //string fileExtension = Path.GetExtension(actualFilePath);
-            string newFilePath = @"C:\Users\romai\Documents\";
-
-            //Console.WriteLine(actualFilePath);
-            //Console.WriteLine("File extension: " + fileExtension);
-
-            //foreach (var list in allCategories)
-            //{
-            //    if (list != null)
-            //    {
-            //        foreach (var extension in list)
-            //        {
-            //            if (extension.Contains(fileExtension))
-            //            {
-            //                switch (list.ToString())
-            //                {
-            //                    case "vidExtensions":
-            //                        newFilePath += "Videos\\";
-            //                        break;
-
-            //                    case "imgExtensions":
-            //                        newFilePath += "Images\\";
-            //                        break;
-
-            //                    case "audioExtensions":
-            //                        newFilePath += "Music\\";
-            //                        break;
-
-            //                    default:
-            //                        filesNotSupported.Add(actualFilePath);
-            //                        Console.WriteLine(actualFilePath + "File extension not supported.");
-            //                        break;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
-            //File.Copy(actualFilePath, newFilePath + Path.GetFileName(actualFilePath));
-            //File.Delete(actualFilePath);
-
-            //Console.WriteLine("File moved successfully to " + newFilePath);
-            //Console.ReadLine();
-
 
         }
 
@@ -107,30 +53,97 @@ namespace MOVEf_WPF
             lvEntries.Background = solidColorBrush;
 
             string location;
-            char separator = Path.DirectorySeparatorChar;
+            //char separator = Path.DirectorySeparatorChar;
 
             if (e.Data.GetData(DataFormats.FileDrop, true) is string[] droppedFilesPaths)
             {
                 foreach (var file in droppedFilesPaths)
                 {
                     FileInfo fileInfo = new FileInfo(file);
+                    location = fileInfo.FullName /*fileInfo.DirectoryName + separator + fileInfo.Name*/;
+                    Item item = new Item()
+                    {
+                        Name = fileInfo.Name,
+                        Path = location,
+                        Extension = fileInfo.Extension
+                    };
                     using (var fs = fileInfo.OpenRead())
                     {
                         try
                         {
-                            location = fileInfo.DirectoryName + separator + fileInfo.Name;
-                            txt.Visibility = Visibility.Hidden;
                             lvEntries.Items.Add(location);
+                            MoveFilesToNewDir(item);
+                            //txt.Visibility = Visibility.Hidden;
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            MessageBox.Show(ex.Message);
                         }
                     }
                 }
             }
         }
 
-        
+        private void MoveFilesToNewDir(Item item)
+        {
+            string newFilePath = @"C:\Users\romai\Documents\"; // CHANGE WITH USER'S DESIRED PATH
+
+            foreach (var list in allCategories)
+            {
+                if (list != null)
+                {
+                    foreach (var extension in list)
+                    {
+                        if (extension.Contains(item.Extension))
+                        {
+                            //MessageBox.Show(allCategories.IndexOf(list).ToString());
+                            switch (allCategories.IndexOf(list))
+                            {
+                                case 0: // Videos
+                                    item.Category = "Videos";
+                                    item.NewPath = newFilePath + "Vidéos\\";
+                                    break;
+
+                                case 1: // Images
+                                    item.Category = "Images";
+                                    item.NewPath = newFilePath + "Images\\";
+                                    break;
+
+                                case 2: // Audio
+                                    item.Category = "Music";
+                                    item.NewPath = newFilePath + "Musique\\";
+                                    break;
+
+                                default:
+                                    filesNotSupported.Add(item.Path);
+                                    MessageBox.Show(item.Extension + " File extension not supported.");
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            char[] driveChar = item.Path.ToCharArray();
+            char[] newPathDriveChar = item.NewPath.ToCharArray();
+
+            if (driveChar[0] == newPathDriveChar[0])
+            {
+              File.Move(item.Path, item.NewPath);
+              MessageBox.Show("ALLO");
+            }
+            else
+            {
+                File.Copy(item.Path, item.NewPath);
+                MessageBox.Show("ALLO222222");
+            }
+
+
+            //File.Delete(actualFilePath);
+            txt.Visibility = Visibility.Visible;
+            txt.Text = "Files moved successfully to " + newFilePath;
+        }
     }
+
+
 }
