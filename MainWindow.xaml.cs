@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 
@@ -16,9 +17,15 @@ namespace MOVEf_WPF
 
         List<string> filesNotSupported { get; } = new();
 
+        ObservableCollection<string> droppedFilesPaths { get; set; }
+        //List<string> droppedFilesPaths { get; } = new();
+        Color color = (Color)ColorConverter.ConvertFromString("#FF313338");
+
+
         public MainWindow(/*string[] myCommandLineArgs*/)
         {
             InitializeComponent();
+            droppedFilesPaths = new ObservableCollection<string>();
             txt.Text = "Drag and drop files here";
 
             allCategories.Add(vidExtensions);
@@ -92,7 +99,6 @@ namespace MOVEf_WPF
 
         private void pnlMainGrid_DragLeave(object sender, DragEventArgs e)
         {
-            Color color = (Color)ColorConverter.ConvertFromString("#FF313338");
             SolidColorBrush solidColorBrush = new SolidColorBrush(color);
             pnlMainGrid.Background = solidColorBrush;
             txt.Background = solidColorBrush;
@@ -100,10 +106,10 @@ namespace MOVEf_WPF
 
         private void pnlMainGrid_Drop(object sender, DragEventArgs e)
         {
-            Color color = (Color)ColorConverter.ConvertFromString("#FF313338");
             SolidColorBrush solidColorBrush = new SolidColorBrush(color);
             pnlMainGrid.Background = solidColorBrush;
             txt.Background = solidColorBrush;
+
             string location;
             char separator = Path.DirectorySeparatorChar;
 
@@ -117,7 +123,8 @@ namespace MOVEf_WPF
                         try
                         {
                             location = fileInfo.DirectoryName + separator + fileInfo.Name;
-                            txt.Text = location;
+                            txt.Visibility = Visibility.Hidden;
+                            this.droppedFilesPaths.Add(location);
                         }
                         catch (Exception ex)
                         {

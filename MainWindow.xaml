@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MOVEf_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="476" Width="960">
+        Title="MOVEf" Height="476" Width="960">
     <Grid x:Name="pnlMainGrid" Drop="pnlMainGrid_Drop" DragEnter="pnlMainGrid_DragEnter" DragLeave="pnlMainGrid_DragLeave" AllowDrop="True" Background="#FF313338">
-        <TextBlock x:Name="txt" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Width="900" HorizontalAlignment="Center" TextAlignment="Center" Background="#FF313338" Foreground="White"><Run Language="fr-fr" Text="Drag and drop files here"/></TextBlock>
+        <ListView Width="250" Height="50" ItemsSource="{Binding DroppedFilesPath}"/>
+        <TextBlock x:Name="txt" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Width="300" HorizontalAlignment="Center" TextAlignment="Center" Background="#FF313338" Foreground="White" Text="Drag and drop files here" FontFamily="Corbel Light" FontSize="14"/>
         <Menu x:Name="mnu" VerticalAlignment="Top" Height="20"/>
     </Grid>
 </Window>
