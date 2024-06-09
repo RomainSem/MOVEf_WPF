@@ -88,13 +88,7 @@ namespace MOVEf_WPF
         {
             pnlMainGrid.Background = Brushes.DarkGray;
             txt.Background = Brushes.DarkGray;
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop, true))
-            {
-            }
-            else
-            {
-            }
+            lvEntries.Background = Brushes.DarkGray;
         }
 
         private void pnlMainGrid_DragLeave(object sender, DragEventArgs e)
@@ -102,6 +96,7 @@ namespace MOVEf_WPF
             SolidColorBrush solidColorBrush = new SolidColorBrush(color);
             pnlMainGrid.Background = solidColorBrush;
             txt.Background = solidColorBrush;
+            lvEntries.Background = solidColorBrush;
         }
 
         private void pnlMainGrid_Drop(object sender, DragEventArgs e)
@@ -109,6 +104,7 @@ namespace MOVEf_WPF
             SolidColorBrush solidColorBrush = new SolidColorBrush(color);
             pnlMainGrid.Background = solidColorBrush;
             txt.Background = solidColorBrush;
+            lvEntries.Background = solidColorBrush;
 
             string location;
             char separator = Path.DirectorySeparatorChar;
@@ -124,7 +120,7 @@ namespace MOVEf_WPF
                         {
                             location = fileInfo.DirectoryName + separator + fileInfo.Name;
                             txt.Visibility = Visibility.Hidden;
-                            this.droppedFilesPaths.Add(location);
+                            lvEntries.Items.Add(location);
                         }
                         catch (Exception ex)
                         {

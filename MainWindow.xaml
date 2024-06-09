@@ -6,9 +6,15 @@
         xmlns:local="clr-namespace:MOVEf_WPF"
         mc:Ignorable="d"
         Title="MOVEf" Height="476" Width="960">
-    <Grid x:Name="pnlMainGrid" Drop="pnlMainGrid_Drop" DragEnter="pnlMainGrid_DragEnter" DragLeave="pnlMainGrid_DragLeave" AllowDrop="True" Background="#FF313338">
-        <ListView Width="250" Height="50" ItemsSource="{Binding DroppedFilesPath}"/>
-        <TextBlock x:Name="txt" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Width="300" HorizontalAlignment="Center" TextAlignment="Center" Background="#FF313338" Foreground="White" Text="Drag and drop files here" FontFamily="Corbel Light" FontSize="14"/>
-        <Menu x:Name="mnu" VerticalAlignment="Top" Height="20"/>
+    <Grid x:Name="pnlMainGrid" Drop="pnlMainGrid_Drop" DragEnter="pnlMainGrid_DragEnter" DragLeave="pnlMainGrid_DragLeave" AllowDrop="True" Background="#FF313338" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView Name="lvEntries" Grid.Row="1" Grid.ColumnSpan="3" Background="#FF313338" Margin="0,20,0,0" Foreground="White"></ListView>
+        <TextBlock x:Name="txt" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Width="300" HorizontalAlignment="Center" TextAlignment="Center" Background="#FF313338" Foreground="White" Text="Drag and drop files here" FontFamily="Corbel Light" FontSize="16"/>
+        <Menu x:Name="mnu" VerticalAlignment="Top" Height="20" Background="White"/>
     </Grid>
 </Window>
