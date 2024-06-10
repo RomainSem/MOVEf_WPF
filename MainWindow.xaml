@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MOVEf_WPF"
         mc:Ignorable="d"
         Title="MOVEf" Height="476" Width="960">
+    
     <Grid x:Name="pnlMainGrid" Drop="pnlMainGrid_Drop" DragEnter="pnlMainGrid_DragEnter" DragLeave="pnlMainGrid_DragLeave" AllowDrop="True" Background="#FF313338" ScrollViewer.VerticalScrollBarVisibility="Hidden">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -13,8 +14,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <DockPanel>
+            <Frame x:Name="parentFrame"/>
+        </DockPanel>
         <ListView Name="lvEntries" Grid.Row="1" Grid.ColumnSpan="3" Background="#FF313338" Margin="0,20,0,0" Foreground="White"></ListView>
         <TextBlock x:Name="txt" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Width="300" HorizontalAlignment="Center" TextAlignment="Center" Background="#FF313338" Foreground="White" Text="Drag and drop files here" FontFamily="Corbel Light" FontSize="16"/>
         <Menu x:Name="mnu" VerticalAlignment="Top" Height="20" Background="White"/>
+        <Button x:Name="btn" Content="Options" HorizontalAlignment="Left" Margin="0,0,10,10" VerticalAlignment="Top" Width="75" Click="btn_Click"/>
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace MOVEf_WPF
 {
@@ -20,12 +21,12 @@ namespace MOVEf_WPF
         public MainWindow()
         {
             InitializeComponent();
-            txt.Text = "Drag and drop files here";
-
+            App.ParentWindowRef = this;
             allCategories.Add(vidExtensions);
             allCategories.Add(imgExtensions);
             allCategories.Add(audioExtensions);
 
+            txt.Text = "Drag and drop files here";
             //myCommandLineArgs = Environment.GetCommandLineArgs();
 
         }
@@ -43,6 +44,13 @@ namespace MOVEf_WPF
             pnlMainGrid.Background = solidColorBrush;
             txt.Background = solidColorBrush;
             lvEntries.Background = solidColorBrush;
+        }
+
+        private void btn_Click(object sender, RoutedEventArgs e)
+        {
+            Options options = new Options();
+            this.Content = options;
+            options.ParentWin = this;
         }
 
         private void pnlMainGrid_Drop(object sender, DragEventArgs e)
@@ -87,6 +95,7 @@ namespace MOVEf_WPF
         private void MoveFilesToNewDir(Item item)
         {
             string newFilePath = @"C:\Users\romai\Documents\"; // CHANGE WITH USER'S DESIRED PATH
+            bool flag = false;
 
             foreach (var list in allCategories)
             {
@@ -101,26 +110,38 @@ namespace MOVEf_WPF
                             {
                                 case 0: // Videos
                                     item.Category = "Videos";
-                                    item.NewPath = newFilePath + "Vidéos\\";
+                                    item.NewPath = newFilePath + "Vidéos\\" + item.Name;
+                                    flag = true;
                                     break;
 
                                 case 1: // Images
                                     item.Category = "Images";
-                                    item.NewPath = newFilePath + "Images\\";
+                                    item.NewPath = newFilePath + /*"Images\\" +*/ item.Name;
+                                    flag = true;
                                     break;
 
                                 case 2: // Audio
                                     item.Category = "Music";
-                                    item.NewPath = newFilePath + "Musique\\";
+                                    item.NewPath = newFilePath + "Musique\\" + item.Name;
+                                    flag = true;
                                     break;
 
                                 default:
                                     filesNotSupported.Add(item.Path);
                                     MessageBox.Show(item.Extension + " File extension not supported.");
+                                    flag = true;
                                     break;
+                            }
+                            if (flag)
+                            {
+                                break;
                             }
                         }
                     }
+                }
+                if (flag)
+                {
+                    break;
                 }
             }
 
@@ -129,8 +150,8 @@ namespace MOVEf_WPF
 
             if (driveChar[0] == newPathDriveChar[0])
             {
-              File.Move(item.Path, item.NewPath);
-              MessageBox.Show("ALLO");
+                File.Move(item.Path, item.NewPath);
+                MessageBox.Show("ALLO");
             }
             else
             {
